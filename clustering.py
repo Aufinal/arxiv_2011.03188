@@ -51,7 +51,7 @@ class ClusteringAlgorithm:
         """
         pass
 
-    def get_cluster_param(self):
+    def _get_cluster_param(self):
         # For gaussian mixture, clustering, the number of clusters is denoted
         # by `n_components`, so we need a small helper function
         if self.cluster_class in [GaussianMixture, BayesianGaussianMixture]:
@@ -60,7 +60,7 @@ class ClusteringAlgorithm:
             return "n_clusters"
 
     def cluster(self, embedding):
-        param = self.get_cluster_param()
+        param = self._get_cluster_param()
         return self.cluster_class(**{param: self.n_clusters}).fit_predict(embedding)
 
     def run(self, G):
