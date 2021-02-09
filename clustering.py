@@ -1,14 +1,13 @@
 """
     Module `clustering.py`
 
-    Implements several clustering algorithms with a common interface.
+    Implements several spectral clustering algorithms with a common interface.
 
     Authors: S. Coste and L. Stephan
 
     References:
     [1]: Simon Coste and Ludovic Stephan. A simpler spectral approach for clustering in
     directed networks, 2021. https://arxiv.org/abs/2102.03188
-
     [2]: Steinar Laenen and He Sun. Higher-order spectral clustering of directed graphs,
     2020. https://arxiv.org/abs/2011.05080
 """

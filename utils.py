@@ -46,7 +46,7 @@ def tridiag_toeplitz(n, a, b, c, format="dense", return_eigenvectors=False):
         - return_eigenvectors: whether to return the eigenvectors along with the
         eigenvalues.
 
-    Return:
+    Output:
         - A: a tridiagonal matrix with the specified format and diagonals
         - v (or (v, left, right)): the eigenvalues (or eigenvalues + eigenvectors) of A
     """
