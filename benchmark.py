@@ -12,8 +12,8 @@ import numpy as np
 from sklearn.metrics import adjusted_rand_score
 
 from clustering import AdjacencyClustering, LaplacianClustering, SVDClustering
-from generator import fast_sbm, tridiag_toeplitz
-from utils import compute_rzero
+from generator import fast_sbm
+from utils import compute_rzero, tridiag_toeplitz
 
 
 def compute_performance(d=3, n_clusters=2, n=1000, n_samples=10, n_eta=10):
