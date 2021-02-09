@@ -85,17 +85,17 @@ def fast_sbm(n_nodes, F, left_proportions=None, right_proportions=None):
     which is Poisson(F[i,j]) and then uniformly choose the edges.
     """
 
-    n_clusters = F.shape[0]
+    l_clusters, r_clusters = F.shape
 
     if right_proportions is None:
-        right_proportions = np.ones(n_clusters) / n_clusters
+        right_proportions = np.ones(r_clusters) / r_clusters
 
     if left_proportions is None:
-        left_proportions = np.ones(n_clusters) / n_clusters
+        left_proportions = np.ones(l_clusters) / l_clusters
 
     # Cluster sizes are rounded below
-    row_sizes = np.array(n_nodes * right_proportions, dtype=int)
-    col_sizes = np.array(n_nodes * left_proportions, dtype=int)
+    row_sizes = np.array(n_nodes * left_proportions, dtype=int)
+    col_sizes = np.array(n_nodes * right_proportions, dtype=int)
 
     row_offsets = np.cumsum(row_sizes) - row_sizes
     col_offsets = np.cumsum(col_sizes) - col_sizes
@@ -105,13 +105,13 @@ def fast_sbm(n_nodes, F, left_proportions=None, right_proportions=None):
     col_sizes[-1] += n_nodes - (col_offsets[-1] + col_sizes[-1])
 
     # True labels
-    row_labels = np.repeat(np.arange(n_clusters), row_sizes)
-    col_labels = np.repeat(np.arange(n_clusters), col_sizes)
+    row_labels = np.repeat(np.arange(l_clusters), row_sizes)
+    col_labels = np.repeat(np.arange(r_clusters), col_sizes)
 
     # We first draw the number of edges per cluster
-    n_edges = np.zeros((n_clusters, n_clusters), dtype=int)
-    for i in range(n_clusters):
-        for j in range(n_clusters):
+    n_edges = np.zeros((l_clusters, r_clusters), dtype=int)
+    for i in range(l_clusters):
+        for j in range(r_clusters):
             n_edges[i, j] = np.random.binomial(
                 row_sizes[i] * col_sizes[j], F[i, j] / n_nodes
             )
@@ -122,8 +122,8 @@ def fast_sbm(n_nodes, F, left_proportions=None, right_proportions=None):
     data = np.ones(tot_edges)
     curr_index = 0
 
-    for i in range(n_clusters):
-        for j in range(n_clusters):
+    for i in range(l_clusters):
+        for j in range(r_clusters):
 
             # Flattened indices of edges in the block [i,j]
             edge_indices = np.random.choice(
@@ -145,7 +145,4 @@ def fast_sbm(n_nodes, F, left_proportions=None, right_proportions=None):
 
     output = coo_matrix((data, (rows, cols)), shape=(n_nodes, n_nodes), dtype=float)
 
-    # Finally, set diag to 0
-    # output.setdiag(np.zeros(actual_size))
-    # output.eliminate_zeros()
     return output, (row_labels, col_labels)
