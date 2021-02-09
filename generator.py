@@ -1,88 +1,36 @@
 """
-GENERATION OF DSBM
-----------------------------------------------------------------------------------
-The functions create_connectivity matrix and tridiag_toeplitz are for creating the
-underlying matrices F.
-The function fast_sbm generates an instance of the directed stochastic blockmodel, in full generality
-with arbitrary number of clusters and arbitrary clusters sizes.
+    Module `generator.py`
+    Efficient generation of directed SBMs.
+
+    Authors: S. Coste and L. Stephan
 """
 
 import numpy as np
-from scipy.sparse import coo_matrix, diags
-
-
-def create_connectivity_matrix(a, b, c, d):
-    """
-    Input :
-        4 positive numbers
-    Output :
-        the 2x2 connectivity matrix corresponding to the inputs and
-        its 2 eigenvalues.
-    """
-
-    F = np.array([[a, b], [c, d]]).astype(float)
-    eigs = (a + d) / 2 + np.sqrt((a - d) ** 2 / 4 + b * c) * np.array([1.0, -1.0])
-    return F, eigs
-
-
-def tridiag_toeplitz(n, a, b, c, format="coo", return_eigenvectors=True):
-    """
-    Creates a tridiagonal Toeplitz matrix of size n,
-    with a on the main diagonal, b on the upper and c on the lower one.
-
-    Inputs :
-        n = the size of the output matrix
-        a,b,c, positive numbers
-
-    Returns:
-        A sparse COO matrix as requested + its eigenvalues. If return_eigenvectors==True
-        returns the left and right eigenvectors.
-    """
-    main = np.full(n, a)
-    upper = np.full(n - 1, b)
-    lower = np.full(n - 1, c)
-    matrix = diags([main, upper, lower], [0, 1, -1], format=format, dtype=float)
-
-    x = np.linspace(1, n, num=n, endpoint=True)
-    eigs = a + 2 * np.sqrt(b * c) * np.cos(np.pi * x * 1.0 / (n + 1))
-
-    if return_eigenvectors:
-        eigenvectors = np.sqrt((c / b) ** x[:, np.newaxis]) * np.sin(
-            x[:, np.newaxis] * x[np.newaxis, :] * np.pi / (n + 1)
-        )
-        eigen_inv = np.sqrt((b / c) ** x[:, np.newaxis]) * np.sin(
-            x[:, np.newaxis] * x[np.newaxis, :] * np.pi / (n + 1)
-        )
-        return matrix, (eigs, eigenvectors, eigen_inv)
-
-    return matrix.todense(), eigs
-
-
-default, _ = create_connectivity_matrix(2, 2, 2, 2)
-default_size = np.array([0.5, 0.5])
+from scipy.sparse import coo_matrix
 
 
 def fast_sbm(n_nodes, F, left_proportions=None, right_proportions=None):
     """
     Fast generation of a directed SBM graph, efficient in the sparse regime.
 
-    Inputs :
-        -n_nodes is the number of nodes.
-        -F is the connectivity matrix.
-        -left/right proportions are the vectors of cluster proportions,
-        ie the size of the i-th cluster is int( n * left_proportion[i] ) on the left
-        and  int( n * right_proportion[i] ) on the right.
+    Input:
+        - n_nodes: number of nodes in the graph
+        - F: connectivity matrix
+        - left_proportions: proportions of vertices that are in the respective left
+        clusters. Must have size equal to F.shape[0]. If not supplied, uniform clusters
+        are assumed.
+        - right_proportions: idem, but for the right clusters. Must have size equal to
+        F.shape[1].
 
-        By default, F = [2, 2 \\ 2, 2] and p = [1/2, 1/2] which corresponds to the
-        directed Erdös-Rényi graph with mean degree 4.
+    Output:
+        - G: a sparse random graph such that a edge (u, v) with u in the i-th left
+        cluster and v in the i-th right cluster has probability F[i, j]/n_nodes of
+        appearing. Returned in sparse COO form.
+        - (row_labels, col_labels): left and right clusters of each vertex
 
-    Returns :
-        - a sparse COO matrix with the edges of the SBM with connectivity F[i,j]/n_nodes on
-         the cluster (i,j).
-
-    Method : for each pair 1 <= i, j <= k, the subgraph spanned by clusters i, j
+    Method: for each pair 1 <= i, j <= k, the subgraph spanned by clusters i, j
     is uniformly random with density F[i, j]. We first sample the number of its edges
-    which is Poisson(F[i,j]) and then uniformly choose the edges.
+    which follows a binomial distribution, and then uniformly choose the edges.
     """
 
     l_clusters, r_clusters = F.shape
