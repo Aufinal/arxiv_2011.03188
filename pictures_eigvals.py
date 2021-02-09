@@ -155,41 +155,45 @@ def plot_eigenvalues(
     plt.show()
 
 
-# ----------
-# First picture
-# ----------
-# Simple path-SBM with p = 10, eta = 0.8
+# ------------
+# Actual picture generation
+# ------------
 
-F = np.array([[5, 8], [2, 5]])
-p = np.array([1 / 2, 1 / 2])
-matrix_colorplot(F, p, p, "pictures/F1.pdf")
-plot_eigenvalues(1000, F, p, p, "pictures/eigenvalues1.pdf")
+if __name__ == "__main__":
 
+    # ----------
+    # First picture
+    # ----------
+    # Simple path-SBM with p = 10, eta = 0.8
 
-# ----------
-# Second picture
-# ----------
-# Explicitly given F, unbalanced p and q
+    F = np.array([[5, 8], [2, 5]])
+    p = np.array([1 / 2, 1 / 2])
+    matrix_colorplot(F, p, p, "pictures/F1.pdf")
+    plot_eigenvalues(2000, F, p, p, "pictures/eigenvalues1.pdf")
 
-F = np.array([[15, 1, 7], [0, 8, 2], [1, 10, 15]])
-p = np.array([0.3, 0.2, 0.5])
-q = np.array([0.7, 0.1, 0.2])
-matrix_colorplot(F, p, q, "pictures/F2.pdf")
-plot_eigenvalues(1000, F, p, q, "pictures/eigenvalues2.pdf")
+    # ----------
+    # Second picture
+    # ----------
+    # Explicitly given F, unbalanced p and q
 
+    F = np.array([[15, 1, 7], [0, 8, 2], [1, 10, 15]])
+    p = np.array([0.3, 0.2, 0.5])
+    q = np.array([0.7, 0.1, 0.2])
+    matrix_colorplot(F, p, q, "pictures/F2.pdf")
+    plot_eigenvalues(2000, F, p, q, "pictures/eigenvalues2.pdf")
 
-# ----------
-# Third picture
-# ----------
-# Balanced blocks, purely triangular connectivity matrix
+    # ----------
+    # Third picture
+    # ----------
+    # Balanced blocks, purely triangular connectivity matrix
 
-b = 4
-F = np.zeros((b, b))
-for i in range(b):
-    F[i, i] = 1 + 4 * i
-    for j in range(i + 1, b):
-        F[i, j] = 10 * np.random.rand()
+    b = 4
+    F = np.zeros((b, b))
+    for i in range(b):
+        F[i, i] = 1 + 4 * i
+        for j in range(i + 1, b):
+            F[i, j] = 10 * np.random.rand()
 
-p = np.array([1 / b for i in range(b)])
-matrix_colorplot(F, p, p, "pictures/F3.pdf")
-plot_eigenvalues(2000, F, p, p, "pictures/eigenvalues3.pdf")
+    p = np.array([1 / b for i in range(b)])
+    matrix_colorplot(F, p, p, "pictures/F3.pdf")
+    plot_eigenvalues(2000, F, p, p, "pictures/eigenvalues3.pdf")
