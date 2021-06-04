@@ -1,8 +1,6 @@
 """
     Module `generator.py`
     Efficient generation of directed SBMs.
-
-    Authors: S. Coste and L. Stephan
 """
 
 import numpy as np

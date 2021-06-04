@@ -1,8 +1,6 @@
 """
     Module `utils.py`
     Utility functions for spectral clustering.
-
-    Authors: S. Coste and L. Stephan
 """
 
 import numpy as np

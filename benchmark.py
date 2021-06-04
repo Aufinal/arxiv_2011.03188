@@ -2,8 +2,6 @@
 Module `comparison_benchmarks.py`
 
 Benchmarks clustering algorithms based on the embedding methods in `embeddings.py`.
-
-Authors: S. Coste and L. Stephan
 """
 
 from os import path

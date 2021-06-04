@@ -3,11 +3,8 @@
     Contains utilities to compute and plot the expected and actual eigenvalues
     of graphs generated according to the directed stochastic block model.
 
-    Authors: S. Coste, L. Stephan
-
     References:
-    [1]: Simon Coste and Ludovic Stephan. A simpler spectral approach for clustering in
-    directed networks, 2021. https://arxiv.org/abs/2102.03188
+    [1]: Submitted paper
 """
 
 import matplotlib.pyplot as plt

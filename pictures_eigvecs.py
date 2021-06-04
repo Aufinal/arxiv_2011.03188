@@ -2,11 +2,8 @@
     Module `picture_eigvecs.py`.
     Numerical validation for the eigenvector correlation formulas in the DSBM.
 
-    Authors: S. Coste and L. Stephan
-
     References:
-    [1]: Simon Coste and Ludovic Stephan. A simpler spectral approach for clustering in
-    directed networks, 2021. https://arxiv.org/abs/2102.03188
+    [1]: Submitted paper
 """
 
 from os import path

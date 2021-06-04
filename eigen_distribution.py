@@ -3,11 +3,8 @@
     Plots the empirical distribution of eigenvectors of random graphs, along with
     Gaussian approximations.
 
-    Authors: S. Coste and L. Stephan
-
     References:
-    [1]: Simon Coste and Ludovic Stephan. A simpler spectral approach for clustering in
-    directed networks, 2021. https://arxiv.org/abs/2102.03188
+    [1]: Submitted paper
 """
 from os import path
 

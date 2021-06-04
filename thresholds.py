@@ -3,11 +3,8 @@
     Computing and plotting various quantities associated to convergence thresholds in
     the directed SBM.
 
-    Authors: S. Coste and L. Stephan
-
     References:
-    [1]: Simon Coste and Ludovic Stephan. A simpler spectral approach for clustering in
-    directed networks, 2021. https://arxiv.org/abs/2102.03188
+    [1]: Submitted paper
 """
 
 import matplotlib.pyplot as plt
